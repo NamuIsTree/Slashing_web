@@ -14,7 +14,7 @@ const Header = (props, context) => {
     return (
         <div className="header-container">
             <header className="web-header">
-                S/ing Demo
+                <h1>S/ing Demo</h1>
             </header>
             <nav className="web-menu">
                 <MenuItem to={'/'}>

@@ -29,6 +29,9 @@ class Private extends React.Component {
                     url={yt_link}
                     playing
                     loop={true}
+                    controls={true}
+                    width="640px"
+                    height="360px"
                     style={{
                         display: 'inline-block'
                     }}
