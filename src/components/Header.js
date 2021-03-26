@@ -13,9 +13,11 @@ const Header = (props, context) => {
     const { router } = context;
     return (
         <div className="header-container">
-            <header className="web-header">
-                <h1>S/ing Demo</h1>
-            </header>
+            <a href="/">
+                <header className="web-header">
+                    <h1>S/ing Demo</h1>
+                </header>
+            </a>
             <nav className="web-menu">
                 <MenuItem to={'/'}>
                     Home
