@@ -1,16 +1,30 @@
 import React from 'react';
+import axios from 'axios';
 import TextField from '@material-ui/core/TextField';
+import Button from '@material-ui/core/Button';
 import ReactPlayer from 'react-player';
 
 import './Private.css'
 
 class Private extends React.Component {
     state = {
-        yt_link : ""
+        yt_link : "",
+        transcript : [],
+        isButtonVisible : true
+    }
+
+    transcriptVideo = async () => {
+        this.setState({ isButtonVisible: false });
+        const url = "http://54.145.2.231:5000/slashing?url=" + this.state.yt_link;
+        const res = await axios.get(url);
+        this.setState({ transcript: res.data, isButtonVisible: true });
     }
 
     render() {
-        const { yt_link } = this.state;
+        const { yt_link, transcript, isButtonVisible } = this.state;
+        
+        console.log(transcript);
+
         return (
             <div className = "private-container">
                 <TextField
@@ -35,15 +49,19 @@ class Private extends React.Component {
                     style={{
                         display: 'inline-block'
                     }}
-                    config={{
-                        youtube: {
-                            playerVars: {
-                                start: 33,
-                                end: 40
-                            }
-                        }
-                    }}
                 />
+                <br/> <br/>
+                { isButtonVisible ? (
+                <Button 
+                    variant="contained" 
+                    color="primary"
+                    onClick={this.transcriptVideo}
+                >
+                    분석하기
+                </Button>
+                ) : (
+                <h3 align="center"> 분석중 </h3>
+                )}
             </div>
         );
     }
