@@ -16,15 +16,42 @@ class Private extends React.Component {
     transcriptVideo = async () => {
         this.setState({ isButtonVisible: false });
         const url = "http://54.145.2.231:5000/slashing?url=" + this.state.yt_link;
-        const res = await axios.get(url);
-        this.setState({ transcript: res.data, isButtonVisible: true });
+        var res = await axios.get(url);
+        res = res.data;
+
+        var jsonStr = "";
+        var key;
+        for (key in res) {
+            if (key === res.length - 1) {
+                break;
+            }
+            jsonStr = jsonStr + res[key];
+        }
+        res = JSON.parse(jsonStr);
+
+        this.setState({ transcript: res, isButtonVisible: true });
     }
 
     render() {
         const { yt_link, transcript, isButtonVisible } = this.state;
         
-        console.log(transcript);
+        var text = "";
+        var transcripts = transcript.transcripts;
+        var words;
+        var i, j;
 
+        console.log(transcripts);
+
+        for (i in transcripts) {
+            console.log(i);
+            words = transcripts[i].words;
+            console.log(words)
+            for (j in words) {
+                text = text + words[j].word + " ";
+            }
+            break;
+        }
+       
         return (
             <div className = "private-container">
                 <TextField
@@ -62,6 +89,12 @@ class Private extends React.Component {
                 ) : (
                 <h3 align="center"> 분석중 </h3>
                 )}
+
+                <br/>
+                <br/>
+                <div className = "transcript-text">
+                    {text}
+                </div>
             </div>
         );
     }

@@ -10,7 +10,6 @@ const MenuItem = ({children, to}) => (
 )
 
 const Header = (props, context) => {
-    const { router } = context;
     return (
         <div className="header-container">
             <a href="/">

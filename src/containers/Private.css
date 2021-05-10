@@ -2,3 +2,11 @@
     display: block;
     text-align: center;
 }
+
+.transcript-text {
+    display: inline-block;
+    width: 700px;
+    line-height: 1.5em;
+    text-align: justify;
+    font-size: 20px;
+}
