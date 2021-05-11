@@ -10,3 +10,9 @@
     text-align: justify;
     font-size: 20px;
 }
+
+.segment-text {
+    display: block;
+    padding: 10px;
+    font-size: 20px;
+}

@@ -2,6 +2,9 @@ import React from 'react';
 import axios from 'axios';
 import TextField from '@material-ui/core/TextField';
 import Button from '@material-ui/core/Button';
+import IconButton from '@material-ui/core/IconButton';
+import PlayCircleOutlineIcon from '@material-ui/icons/PlayCircleOutline';
+import PauseCircleOutlineIcon from '@material-ui/icons/PauseCircleOutline';
 import ReactPlayer from 'react-player';
 
 import './Private.css'
@@ -10,48 +13,84 @@ class Private extends React.Component {
     state = {
         yt_link : "",
         transcript : [],
-        isButtonVisible : true
+        isPlaying: [],
+        isButtonVisible : true,
+        isCompleted : false
     }
 
     transcriptVideo = async () => {
         this.setState({ isButtonVisible: false });
         const url = "http://54.145.2.231:5000/slashing?url=" + this.state.yt_link;
-        var res = await axios.get(url);
-        res = res.data;
+        var transcripts = await axios.get(url);
+        transcripts = transcripts.data;
 
         var jsonStr = "";
         var key;
-        for (key in res) {
-            if (key === res.length - 1) {
+        for (key in transcripts) {
+            if (key === transcripts.length - 1) {
                 break;
             }
-            jsonStr = jsonStr + res[key];
+            jsonStr = jsonStr + transcripts[key];
         }
-        res = JSON.parse(jsonStr);
+        transcripts = JSON.parse(jsonStr);
+        transcripts = transcripts.transcripts;
 
-        this.setState({ transcript: res, isButtonVisible: true });
-    }
-
-    render() {
-        const { yt_link, transcript, isButtonVisible } = this.state;
-        
         var text = "";
-        var transcripts = transcript.transcripts;
+        var obj = [], sub;
         var words;
-        var i, j;
-
-        console.log(transcripts);
+        var i, j, start, end = -1, s, e, count = 0;
 
         for (i in transcripts) {
-            console.log(i);
             words = transcripts[i].words;
-            console.log(words)
             for (j in words) {
-                text = text + words[j].word + " ";
+                s = words[j].start_time;
+                e = words[j].start_time + words[j].duration;
+                
+                if (end === -1) {
+                    text = words[j].word + " ";
+                    start = s;
+                    end = e;
+                    count = 1;
+                }
+                else {
+                    if (s - end >= 1.0 || count === 10) {
+                        sub = {
+                            "text" : text,
+                            "start" : start,
+                            "end" : end
+                        }
+                        obj.push(sub);
+                        text = "";
+                        start = s;
+                        count = 0;
+                    }
+                    text = text + words[j].word + " ";
+                    count = count + 1;
+                    end = e;
+                }
             }
             break;
         }
-       
+        if (count > 0) {
+            sub = {
+                "text" : text,
+                "start" : start,
+                "end" : end
+            }
+            obj.push(sub);
+        }
+
+        var isPlaying = [];
+        for (i = 0; i < obj.length; i++) {
+            isPlaying.push(false);
+        }
+
+        this.setState({ transcript: obj, isPlaying: isPlaying, isButtonVisible: true, isCompleted: true });
+    }
+
+    render() {
+        const { yt_link, transcript, isPlaying, isButtonVisible, isCompleted } = this.state;
+
         return (
             <div className = "private-container">
                 <TextField
@@ -71,8 +110,8 @@ class Private extends React.Component {
                     playing
                     loop={true}
                     controls={true}
-                    width="640px"
-                    height="360px"
+                    width="500px"
+                    height="280px"
                     style={{
                         display: 'inline-block'
                     }}
@@ -92,9 +131,88 @@ class Private extends React.Component {
 
                 <br/>
                 <br/>
-                <div className = "transcript-text">
-                    {text}
-                </div>
+                {
+                isCompleted ? (
+                    <div className = "videos-wrapper">
+                    {transcript.map((t, idx) => {
+                        const seg_start = Math.floor(t.start);
+                        const seg_end = Math.ceil(t.end);
+                        const seg_text = t.text;
+
+                        return (
+                            <div key = {idx} className = "video-segment">
+                                <ReactPlayer
+                                    url = {yt_link}
+                                    playing = {isPlaying[idx]}
+                                    loop = {true}
+                                    controls = {false}
+                                    width = "300px"
+                                    height = "200px"
+                                    style = {{
+                                        display: 'inline-block'
+                                    }}
+                                    config = {{
+                                        youtube: {
+                                            playerVars: {
+                                                start: seg_start,
+                                                end: seg_end
+                                            }
+                                        }
+                                    }}
+                                />
+                                <div>
+                                    <IconButton 
+                                        color="secondary"
+                                        component="span"
+                                        onClick = {(event) => {
+                                            var nPlaying = isPlaying;
+                                            nPlaying[idx] = !nPlaying[idx];
+                                            this.setState({isPlaying: nPlaying});
+                                        }}
+                                    >
+                                    {
+                                        isPlaying[idx] ? (
+                                            <PauseCircleOutlineIcon fontSize="large" />
+                                        ) : (
+                                            <PlayCircleOutlineIcon fontSize="large" />
+                                        )
+                                    }
+                                    </IconButton>
+                                    <TextField
+                                        id = "segment-text"
+                                        multiline
+                                        rowsMax = {4}
+                                        value = {seg_text}
+                                        style = {{
+                                            width: '400px'
+                                        }}
+                                        onChange = {(event) => {
+                                            var ntranscript = transcript;
+                                            ntranscript[idx].text = event.target.value;
+                                            this.setState({transcript: ntranscript});
+                                        }}
+                                    />
+                                    <br />
+                                    <br />
+                                </div>
+                            </div>
+                        );
+                    })}
+                    <Button 
+                        variant="contained" 
+                        color="primary"
+                        onClick={(event) => {
+                            alert('저장되었습니다.');
+                        }}
+                    >
+                        SAVE
+                    </Button>
+                    </div> 
+                ) : (
+                    <div className = "no-data">
+                        No Data.
+                    </div>
+                )}
             </div>
         );
     }
