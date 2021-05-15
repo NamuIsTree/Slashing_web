@@ -16,3 +16,12 @@
     padding: 10px;
     font-size: 20px;
 }
+
+.spacing {
+    padding: 10px;
+}
+
+.button-text {
+    margin-left: 20px;
+    margin-bottom: 10px; 
+}

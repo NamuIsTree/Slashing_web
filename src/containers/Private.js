@@ -5,6 +5,13 @@ import Button from '@material-ui/core/Button';
 import IconButton from '@material-ui/core/IconButton';
 import PlayCircleOutlineIcon from '@material-ui/icons/PlayCircleOutline';
 import PauseCircleOutlineIcon from '@material-ui/icons/PauseCircleOutline';
+
+import Fab from '@material-ui/core/Fab';
+import CircularProgress from '@material-ui/core/CircularProgress';
+import CheckIcon from '@material-ui/icons/Check';
+import AssessmentIcon from '@material-ui/icons/Assessment';
+import { green } from '@material-ui/core/colors';
+
 import ReactPlayer from 'react-player';
 
 import './Private.css'
@@ -34,6 +41,8 @@ class Private extends React.Component {
         }
         transcripts = JSON.parse(jsonStr);
         transcripts = transcripts.transcripts;
+
+        console.log(transcripts);
 
         var text = "";
         var obj = [], sub;
@@ -79,6 +88,7 @@ class Private extends React.Component {
             }
             obj.push(sub);
         }
+        console.log(obj);
 
         var isPlaying = [];
         for (i = 0; i < obj.length; i++) {
@@ -126,11 +136,26 @@ class Private extends React.Component {
                     분석하기
                 </Button>
                 ) : (
-                <h3 align="center"> 분석중 </h3>
+                    !isCompleted ? 
+                    (
+                        <div className = "progress">
+                            <CircularProgress style = {{color: '#4caf50'}} /> 
+                            <br/>
+                            <Button
+                                style = {{color: '#4caf50'}}
+                            > 분석하고 있어요</Button>
+                        </div>
+                    ): (
+                        <div className = "completed-icon">
+                            <CheckIcon style = {{color: '#4caf50'}} /> 
+                            <br/>
+                            <Button
+                                style = {{color: '#4caf50'}}
+                            > 분석이 끝났습니다</Button>
+                        </div>
+                    )
                 )}
-
-                <br/>
-                <br/>
+                <br/> <br/>
                 {
                 isCompleted ? (
                     <div className = "videos-wrapper">
@@ -209,9 +234,7 @@ class Private extends React.Component {
                     </Button>
                     </div> 
                 ) : (
-                    <div className = "no-data">
-                        No Data.
-                    </div>
+                    <div className = "no-data" />
                 )}
             </div>
         );
