@@ -6,11 +6,8 @@ import IconButton from '@material-ui/core/IconButton';
 import PlayCircleOutlineIcon from '@material-ui/icons/PlayCircleOutline';
 import PauseCircleOutlineIcon from '@material-ui/icons/PauseCircleOutline';
 
-import Fab from '@material-ui/core/Fab';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import CheckIcon from '@material-ui/icons/Check';
-import AssessmentIcon from '@material-ui/icons/Assessment';
-import { green } from '@material-ui/core/colors';
 
 import ReactPlayer from 'react-player';
 
@@ -19,6 +16,7 @@ import './Private.css'
 class Private extends React.Component {
     state = {
         yt_link : "",
+        yt_title : "",
         transcript : [],
         isPlaying: [],
         isButtonVisible : true,
@@ -26,8 +24,10 @@ class Private extends React.Component {
     }
 
     transcriptVideo = async () => {
+        const { yt_link } = this.state;
+
         this.setState({ isButtonVisible: false });
-        const url = "http://54.145.2.231:5000/slashing?url=" + this.state.yt_link;
+        const url = "http://54.145.2.231:5000/slashing?url=" + yt_link;
         var transcripts = await axios.get(url);
         transcripts = transcripts.data;
 
@@ -95,18 +95,46 @@ class Private extends React.Component {
             isPlaying.push(false);
         }
 
-        this.setState({ transcript: obj, isPlaying: isPlaying, isButtonVisible: true, isCompleted: true });
+        const yt_title = await axios.post("http://slashing.duckdns.org:8080/getYoutubeTitle", { yt_link: yt_link });
+
+        console.log(yt_title);
+
+        this.setState({ transcript: obj, isPlaying: isPlaying, yt_title: yt_title.data, isCompleted: true });
+    }
+
+    saveData = async () => {
+        const { yt_link, yt_title, transcript } = this.state;
+        const obj = {
+            yt_link: yt_link,
+            yt_title: yt_title,
+            transcript: transcript
+        }
+
+        console.log(obj);
+        const response = await axios.post("http://slashing.duckdns.org:8080/save", obj);
+        console.log(response.data);
+
+        if (response.data.result === 1) {
+            alert('저장이 완료되었습니다.');
+        }
+        else {
+            alert('저장 중에 문제가 발생했습니다.\n관리자에게 문의 부탁드립니다.');
+        }
     }
 
     render() {
-        const { yt_link, transcript, isPlaying, isButtonVisible, isCompleted } = this.state;
+        const { yt_link, yt_title, transcript, isPlaying, isButtonVisible, isCompleted } = this.state;
 
         return (
             <div className = "private-container">
                 <TextField
                     id="youtube-url"
                     label="YouTube URL"
-                    variant="outlined"
+                    variant= {isButtonVisible ? "outlined" : "filled"}
+                    value = {yt_link}
+                    InputProps = {{
+                        readOnly: !isButtonVisible,
+                    }}
                     onChange = {(event) => {
                         try {
                             this.setState({yt_link: event.target.value});
@@ -155,7 +183,11 @@ class Private extends React.Component {
                         </div>
                     )
                 )}
-                <br/> <br/>
+                <br/>
+                <h3>
+                    {yt_title}
+                </h3>
+                <br/>
                 {
                 isCompleted ? (
                     <div className = "videos-wrapper">
@@ -226,9 +258,7 @@ class Private extends React.Component {
                     <Button 
                         variant="contained" 
                         color="primary"
-                        onClick={(event) => {
-                            alert('저장되었습니다.');
-                        }}
+                        onClick={this.saveData}
                     >
                         SAVE
                     </Button>
