@@ -1,3 +1,7 @@
 .search-container {
     text-align: center;
 }
+
+.search-key {
+    font-weight: 700;
+}

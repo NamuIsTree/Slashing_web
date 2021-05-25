@@ -11,7 +11,10 @@ class Home extends React.Component {
     }
 
     search = () => {
-        window.location.href = '/search?q=' + this.state.search_key;
+        var skey = this.state.search_key;
+        skey = encodeURI(skey);
+
+        window.location.href = '/search?q=' + skey;
     }
 
     render() {
