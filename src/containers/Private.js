@@ -27,7 +27,7 @@ class Private extends React.Component {
         const { yt_link } = this.state;
 
         this.setState({ isButtonVisible: false });
-        const url = "http://54.145.43.110:5000/slashing?url=" + yt_link;
+        const url = "http://54.243.162.187:5000/slashing?url=" + yt_link;
         var transcripts = await axios.get(url);
         transcripts = transcripts.data;
 
