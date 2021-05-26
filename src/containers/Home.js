@@ -12,7 +12,7 @@ class Home extends React.Component {
 
     search = () => {
         var skey = this.state.search_key;
-        skey = encodeURI(skey);
+        skey = encodeURIComponent(skey);
 
         window.location.href = '/search?q=' + skey;
     }
