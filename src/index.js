@@ -6,6 +6,7 @@ import App from './App';
 import Home from './containers/Home';
 import Private from './containers/Private';
 import Search from './containers/Search';
+import View from './containers/View';
 
 import './index.css';
 
@@ -14,6 +15,7 @@ ReactDOM.render(
         <Route path="/" component={App}>
             <IndexRoute component={Home}/>
             <Route path="/search" component={Search}/>
+            <Route path="/view" component={View}/>
             <Route path="/private" component={Private}/>
         </Route>
     </Router>,
