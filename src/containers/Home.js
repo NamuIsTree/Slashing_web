@@ -17,6 +17,12 @@ class Home extends React.Component {
         window.location.href = '/search?q=' + skey;
     }
 
+    handleKeyPress = e => {
+        if (e.key === 'Enter') {
+            this.search();
+        }
+    }
+
     render() {
         console.log(this.state.search_key);
         return (
@@ -35,6 +41,7 @@ class Home extends React.Component {
                             </InputAdornment>
                         )
                     }}
+                    onKeyPress={this.handleKeyPress}
                 />
                 <Button
                     variant="contained"
