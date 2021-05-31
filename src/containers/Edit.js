@@ -206,6 +206,7 @@ class Edit extends React.Component {
                                                     var nPlaying = isPlaying;
                                                     var newValue = event.target.value;
                                                     if (newValue < 0) newValue = 0;
+                                                    if (newValue <= start) newValue = start + 1;
                                                     if (isPlaying[index] === true) nPlaying[index] = false;
                                                     nData.Lyrics[index].end = parseInt(newValue);
                                                     this.setState({data: nData, isPlaying: nPlaying});

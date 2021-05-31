@@ -32,7 +32,7 @@ class Private extends React.Component {
         var check = await axios.post('http://slashing.duckdns.org:8080/find/uri', {youtubeLink: yt_link});
         check = check.data;
         if (check.result === 1) {
-            alert('이미 존재하는 영상입니다.\n해당 영상의 수정 페이지로 이동합니다.');
+            alert('이미 존재하는 영상입니다.\n해당 영상의 보기 페이지로 이동합니다.');
             window.location.href = '/view?q=' + check._id;
         }
         
@@ -124,12 +124,22 @@ class Private extends React.Component {
             transcript: transcript
         }
 
-        console.log(obj);
+        var check = await axios.post('http://slashing.duckdns.org:8080/find/uri', {youtubeLink: yt_link});
+        check = check.data;
+        if (check.result === 1) {
+            alert('이미 존재하는 영상입니다.\n해당 영상의 보기 페이지로 이동합니다.');
+            window.location.href = '/view?q=' + check._id;
+            return;
+        }
+
         const response = await axios.post("http://slashing.duckdns.org:8080/save", obj);
-        console.log(response.data);
 
         if (response.data.result === 1) {
-            alert('저장이 완료되었습니다.');
+            alert('저장이 완료되었습니다.\n');
+            
+            var check = await axios.post('http://slashing.duckdns.org:8080/find/uri', {youtubeLink: yt_link});
+            check = check.data;
+            window.location.href = '/view?q=' + check._id;
         }
         else {
             alert('저장 중에 문제가 발생했습니다.\n관리자에게 문의 부탁드립니다.');
@@ -214,6 +224,7 @@ class Private extends React.Component {
                         return (
                             <div key = {idx} className = "video-segment">
                                 <ReactPlayer
+                                    key = {idx + '-' + isPlaying[idx]}
                                     url = {yt_link}
                                     playing = {isPlaying[idx]}
                                     loop = {true}
@@ -285,6 +296,7 @@ class Private extends React.Component {
                                                 var nPlaying = isPlaying;
                                                 var newValue = parseInt(event.target.value);
                                                 if (newValue < 0) newValue = 0;
+                                                if (newValue <= seg_start) newValue = seg_start + 1;
                                                 if (isPlaying[idx] === true) nPlaying[idx] = false;
                                                 nTranscript[idx].end = newValue;
                                                 this.setState({transcript: nTranscript, isPlaying: nPlaying});
