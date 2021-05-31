@@ -9,12 +9,13 @@ import Divider from '@material-ui/core/Divider';
 import Collapse from '@material-ui/core/Collapse';
 import ExpandLess from '@material-ui/icons/ExpandLess';
 import ExpandMore from '@material-ui/icons/ExpandMore';
+import TextField from '@material-ui/core/TextField';
 
 import ReactPlayer from 'react-player';
 
-import './View.css';
+import './Edit.css';
 
-class View extends React.Component {
+class Edit extends React.Component {
     state = {
         data: [],
         isPlaying: [],
@@ -32,6 +33,19 @@ class View extends React.Component {
         }
 
         this.setState({ data: resp.data[0], isPlaying: isPlaying, isLoading: false });
+    }
+    
+    updateLyrics = async() => {
+        const _id = this.props.location.query.q;
+        var resp = await axios.post('http://slashing.duckdns.org:8080/edit/lyric', { _id: _id, Lyrics: this.state.data.Lyrics});
+
+        if (resp.result === 0) {
+            alert('수정에 문제가 발생했습니다.\n관리자에게 연락 바랍니다.');
+        }
+        else {
+            alert('정상적으로 수정되었습니다.');
+            window.location.href = '/view?q=' + _id;
+        }
     }
 
     componentDidMount() {
@@ -57,18 +71,16 @@ class View extends React.Component {
                         <div>
                             {data.lastModifiedTime}에 마지막으로 수정됨
                         </div>
-                        <div className="edit-button">
+                        <div className="save-button">
                             <Button
                                 variant="contained"
-                                color="primary"
+                                color="secondary"
                                 style={{
                                     fontFamily: "inherit"
                                 }}
-                                onClick={(event) => {
-                                    window.location.href='/edit?q=' + this.props.location.query.q;
-                                }}
+                                onClick={this.updateLyrics}
                             >
-                                edit
+                                save
                             </Button>
                         </div>
                     </header>
@@ -111,28 +123,6 @@ class View extends React.Component {
                         const start = Math.floor(lyric.start);
                         const end = Math.ceil(lyric.end);
                         
-                        const start_min = Math.floor(start / 60);
-                        const start_sec = start % 60;
-                        const end_min = Math.floor(end / 60);
-                        const end_sec = end % 60;
-
-                        var start_time;
-                        var end_time;
-
-                        if (start_min < 1) {
-                            start_time = start + '초';
-                        }
-                        else {
-                            start_time = start_min + '분 ' + start_sec + '초';
-                        }
-
-                        if (end_min < 1) {
-                            end_time = end + '초';
-                        }
-                        else {
-                            end_time = end_min + '분 ' + end_sec + '초';
-                        }
-
                         return (
                             <div key={index}>
                                 <div className="video-wrapper">
@@ -180,10 +170,24 @@ class View extends React.Component {
                                         }
                                         </IconButton>
                                         <span className="lyric-interval">
-                                            {start_time + ' ~ ' + end_time}
+                                            {start + '초 ~ ' + end + '초'}
                                         </span>
                                         <div className="video-segment-lyric">
-                                            {lyric.text}
+                                            <TextField
+                                                variant="outlined"
+                                                multiline
+                                                value={lyric.text}
+                                                style={{
+                                                    width: "350px",
+                                                    fontFamily: "inherit"
+                                                }}
+                                                onChange = {(event) => {
+                                                    var nData = data;
+                                                    nData.Lyrics[index].text = event.target.value;
+                                                    this.setState({data: nData});
+                                                }}
+                                            />
+
                                         </div>
                                     </span>
                                 </div>
@@ -193,18 +197,16 @@ class View extends React.Component {
                     })}
                 </div>
                 )}
-                <div className="edit-button-for-mini">
+                <div className="save-button-for-mini">
                     <Button
                         variant="contained"
-                        color="primary"
+                        color="secondary"
                         style={{
                             fontFamily: "inherit"
                         }}
-                        onClick={(event) => {
-                            window.location.href='/edit?q=' + this.props.location.query.q;
-                        }}
+                        onClick={this.updateLyrics}
                     >
-                        edit
+                        save
                     </Button>
                 </div>
             </div>
@@ -212,4 +214,4 @@ class View extends React.Component {
     }
 }
 
-export default View;
+export default Edit;

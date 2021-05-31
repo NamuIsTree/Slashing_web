@@ -1,7 +1,65 @@
+@font-face {
+    font-family: 'LotteMartDream';
+    font-style: normal;
+    font-weight: 400;
+    src: url('//cdn.jsdelivr.net/korean-webfonts/1/corps/lottemart/LotteMartDream/LotteMartDreamMedium.woff2') format('woff2'), url('//cdn.jsdelivr.net/korean-webfonts/1/corps/lottemart/LotteMartDream/LotteMartDreamMedium.woff') format('woff');
+}
+@font-face {
+    font-family: 'LotteMartDream';
+    font-style: normal;
+    font-weight: 700;
+    src: url('//cdn.jsdelivr.net/korean-webfonts/1/corps/lottemart/LotteMartDream/LotteMartDreamBold.woff2') format('woff2'), url('//cdn.jsdelivr.net/korean-webfonts/1/corps/lottemart/LotteMartDream/LotteMartDreamBold.woff') format('woff');
+}
+@font-face {
+    font-family: 'LotteMartDream';
+    font-style: normal;
+    font-weight: 300;
+    src: url('//cdn.jsdelivr.net/korean-webfonts/1/corps/lottemart/LotteMartDream/LotteMartDreamLight.woff2') format('woff2'), url('//cdn.jsdelivr.net/korean-webfonts/1/corps/lottemart/LotteMartDream/LotteMartDreamLight.woff') format('woff');
+}
+.lottemartdream * {
+    font-family: 'LotteMartDream', sans-serif;
+}
+
 .view-container {
+    font-family: 'LotteMartDream', sans-serif;
     text-align: center;
+}
+
+@media (max-width: 899px) {
+    .edit-button {
+        display: none;
+    }
+}
+@media (min-width: 900px) {
+    .edit-button {
+        display: inline-block;
+        position: fixed;
+        font-family: inherit;
+        margin-left: 40vw;
+        margin-top: 90vh;
+        top: 0;
+    }
+
+    .edit-button-for-mini {
+        display: none;
+    }
 }
 
 .video-segment-lyric {
     padding-bottom: 10px;
+}
+
+.video-wrapper {
+    display: inline-block;
+    width: 710px;
+    height: 200px;
+    padding-bottom: 20px;
+}
+
+.lyric-segment {
+    width: 400px;
+    height: 200px;
+    padding-left: 10px;
+    margin-top: 40px;
+    float: right;
 }

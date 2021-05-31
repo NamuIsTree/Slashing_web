@@ -28,6 +28,13 @@ class Private extends React.Component {
 
         this.setState({ isButtonVisible: false });
         const url = "http://54.243.162.187:5000/slashing?url=" + yt_link;
+        
+        var check = await axios.post('http://slashing.duckdns.org:8080/find/uri', {youtubeLink: yt_link});
+        if (check.result === 1) {
+            alert('이미 존재하는 영상입니다.\n해당 영상의 수정 페이지로 이동합니다.');
+            window.location.href = '/view?q=' + check._id;
+        }
+        
         var transcripts = await axios.get(url);
         transcripts = transcripts.data;
 
@@ -91,8 +98,14 @@ class Private extends React.Component {
         console.log(obj);
 
         var isPlaying = [];
+        j = -1;
         for (i = 0; i < obj.length; i++) {
             isPlaying.push(false);
+
+            if (i !== 0 && obj[i].start === 0) {
+                obj[i].start = obj[j].end;
+            }
+            j = i;
         }
 
         const yt_title = await axios.post("http://slashing.duckdns.org:8080/getYoutubeTitle", { yt_link: yt_link });

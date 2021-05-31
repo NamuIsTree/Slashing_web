@@ -12,6 +12,12 @@ class Home extends React.Component {
 
     search = () => {
         var skey = this.state.search_key;
+
+        if (skey === "") {
+            alert('검색어를 입력해주세요!');
+            return;
+        }
+
         skey = encodeURIComponent(skey);
 
         window.location.href = '/search?q=' + skey;
