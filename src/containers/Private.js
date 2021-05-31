@@ -137,7 +137,7 @@ class Private extends React.Component {
         if (response.data.result === 1) {
             alert('저장이 완료되었습니다.\n');
             
-            var check = await axios.post('http://slashing.duckdns.org:8080/find/uri', {youtubeLink: yt_link});
+            check = await axios.post('http://slashing.duckdns.org:8080/find/uri', {youtubeLink: yt_link});
             check = check.data;
             window.location.href = '/view?q=' + check._id;
         }
