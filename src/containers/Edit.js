@@ -56,6 +56,8 @@ class Edit extends React.Component {
         const {data, isPlaying, isLoading, isVideoOpened} = this.state;
         const Lyrics = data.Lyrics;
 
+        console.log(Lyrics);
+
         return (
             <div className="view-container">
                 {isLoading ? (
@@ -124,7 +126,7 @@ class Edit extends React.Component {
                         const end = Math.ceil(lyric.end);
                         
                         return (
-                            <div key={index}>
+                            <div key={index + '-' + isPlaying[index]}>
                                 <div className="video-wrapper">
                                     <ReactPlayer
                                         key={index}
@@ -170,7 +172,48 @@ class Edit extends React.Component {
                                         }
                                         </IconButton>
                                         <span className="lyric-interval">
-                                            {start + '초 ~ ' + end + '초'}
+                                            <TextField
+                                                label="Start"
+                                                type="number"
+                                                style ={{
+                                                    width: "44px"
+                                                }}
+                                                value={start}
+                                                onChange = {(event) => {
+                                                    var nData = data;
+                                                    var nPlaying = isPlaying;
+                                                    var newValue = parseInt(event.target.value);
+                                                    if (newValue < 0) newValue = 0;
+                                                    if (newValue >= end) newValue = end - 1;
+                                                    if (isPlaying[index] === true) nPlaying[index] = false;
+                                                    nData.Lyrics[index].start = newValue;
+                                                    
+                                                    this.setState({data: nData, isPlaying: nPlaying});
+                                                }}
+                                            />
+                                            <span>
+                                                {'초 ~ '}
+                                            </span>
+                                            <TextField
+                                                label="End"
+                                                type="number"
+                                                style ={{
+                                                    width: "44px"
+                                                }}
+                                                value={end}
+                                                onChange = {(event) => {
+                                                    var nData = data;
+                                                    var nPlaying = isPlaying;
+                                                    var newValue = event.target.value;
+                                                    if (newValue < 0) newValue = 0;
+                                                    if (isPlaying[index] === true) nPlaying[index] = false;
+                                                    nData.Lyrics[index].end = parseInt(newValue);
+                                                    this.setState({data: nData, isPlaying: nPlaying});
+                                                }}
+                                            />
+                                            <span>
+                                                {'초'}
+                                            </span>
                                         </span>
                                         <div className="video-segment-lyric">
                                             <TextField

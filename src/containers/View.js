@@ -133,6 +133,8 @@ class View extends React.Component {
                             end_time = end_min + '분 ' + end_sec + '초';
                         }
 
+                        const texts = lyric.text.split('\n');
+
                         return (
                             <div key={index}>
                                 <div className="video-wrapper">
@@ -157,7 +159,7 @@ class View extends React.Component {
                                             }
                                         }}
                                     />
-                                    <span className="lyric-segment">
+                                    <div className="lyric-segment">
                                         <IconButton
                                             color="secondary"
                                             component="span"
@@ -183,9 +185,15 @@ class View extends React.Component {
                                             {start_time + ' ~ ' + end_time}
                                         </span>
                                         <div className="video-segment-lyric">
-                                            {lyric.text}
+                                            {texts.map((t, index) => {
+                                                return (
+                                                    <span key={index} className="text-segment">
+                                                        {t} <br/>
+                                                    </span>
+                                                )
+                                            })}
                                         </div>
-                                    </span>
+                                    </div>
                                 </div>
                                 <br/>
                             </div>

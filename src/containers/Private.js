@@ -30,6 +30,7 @@ class Private extends React.Component {
         const url = "http://54.243.162.187:5000/slashing?url=" + yt_link;
         
         var check = await axios.post('http://slashing.duckdns.org:8080/find/uri', {youtubeLink: yt_link});
+        check = check.data;
         if (check.result === 1) {
             alert('이미 존재하는 영상입니다.\n해당 영상의 수정 페이지로 이동합니다.');
             window.location.href = '/view?q=' + check._id;
@@ -164,7 +165,8 @@ class Private extends React.Component {
                     width="500px"
                     height="280px"
                     style={{
-                        display: 'inline-block'
+                        display: 'inline-block',
+                        backgroundColor: '#D8D8D8'
                     }}
                 />
                 <br/> <br/>
@@ -248,6 +250,51 @@ class Private extends React.Component {
                                         )
                                     }
                                     </IconButton>
+                                    <span className="segment-interval">
+                                        <TextField
+                                            label="Start"
+                                            type="number"
+                                            style ={{
+                                                width: "44px"
+                                            }}
+                                            value={seg_start}
+                                            onChange = {(event) => {
+                                                var nTranscript = transcript;
+                                                var nPlaying = isPlaying;
+                                                var newValue = parseInt(event.target.value);
+                                                if (newValue < 0) newValue = 0;
+                                                if (newValue >= seg_end) newValue = seg_end - 1;
+                                                if (isPlaying[idx] === true) nPlaying[idx] = false;
+                                                nTranscript[idx].start = newValue;
+                                                
+                                                this.setState({transcript: nTranscript, isPlaying: nPlaying});
+                                            }}
+                                        />
+                                        <span>
+                                            {'초 ~ '}
+                                        </span>
+                                        <TextField
+                                            label="End"
+                                            type="number"
+                                            style ={{
+                                                width: "44px"
+                                            }}
+                                            value={seg_end}
+                                            onChange = {(event) => {
+                                                var nTranscript = transcript;
+                                                var nPlaying = isPlaying;
+                                                var newValue = parseInt(event.target.value);
+                                                if (newValue < 0) newValue = 0;
+                                                if (isPlaying[idx] === true) nPlaying[idx] = false;
+                                                nTranscript[idx].end = newValue;
+                                                this.setState({transcript: nTranscript, isPlaying: nPlaying});
+                                            }}
+                                        />
+                                        <span>
+                                            {'초'}
+                                        </span>
+                                    </span>
+                                    <br/>
                                     <TextField
                                         id = "segment-text"
                                         multiline

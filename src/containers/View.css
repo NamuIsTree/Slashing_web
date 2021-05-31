@@ -46,7 +46,10 @@
 }
 
 .video-segment-lyric {
+    padding-top: 5px;
     padding-bottom: 10px;
+    font-size: 18px;
+    font-weight: 700;
 }
 
 .video-wrapper {
@@ -60,6 +63,10 @@
     width: 400px;
     height: 200px;
     padding-left: 10px;
-    margin-top: 40px;
+    margin-top: 10px;
     float: right;
+}
+
+.text-segment {
+    line-height: 1.5em;
 }
