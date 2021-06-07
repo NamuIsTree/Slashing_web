@@ -34,6 +34,26 @@ class View extends React.Component {
         this.setState({ data: resp.data[0], isPlaying: isPlaying, isLoading: false });
     }
 
+    copyLyrics = () => {
+        const { data } = this.state;
+        const Lyrics = data.Lyrics;
+        var copied = data.youtubeTitle + ' (' + data.youtubeLink + ')\n\n';
+        Lyrics.forEach(lyric => {
+            copied = copied + '[ ' + Math.floor(lyric.start) + 'sec ~ ' + Math.ceil(lyric.end) + 'sec ]\n';
+            copied = copied + lyric.text + '\n\n';
+        }) 
+        copied = copied + 'This Lyrics is copied from S/ING (http://slashing.duckdns.org/view?q=' + this.props.location.query.q + ')';
+
+        const t = document.createElement("textarea");
+        document.body.appendChild(t);
+        t.value = copied;
+        t.select();
+        document.execCommand('copy');
+        document.body.removeChild(t);
+
+        alert('가사가 클립 보드에 저장되었습니다!')
+    }
+
     componentDidMount() {
         this.getLyrics();
     }
@@ -58,6 +78,17 @@ class View extends React.Component {
                             {data.lastModifiedTime}에 마지막으로 수정됨
                         </div>
                         <div className="edit-button">
+                            <Button
+                                variant="contained"
+                                color="secondary"
+                                style={{
+                                    fontFamily: "inherit"
+                                }}
+                                onClick={this.copyLyrics}
+                            >
+                                copy
+                            </Button>
+                            <br/> <br/>
                             <Button
                                 variant="contained"
                                 color="primary"
@@ -204,8 +235,21 @@ class View extends React.Component {
                 <div className="edit-button-for-mini">
                     <Button
                         variant="contained"
+                        color="secondary"
+                        style={{
+                            display:'inline-block',
+                            fontFamily: "inherit"
+                        }}
+                        onClick={this.copyLyrics}
+                    >
+                        copy
+                    </Button>
+                    {'   '}
+                    <Button
+                        variant="contained"
                         color="primary"
                         style={{
+                            display: 'inline-block',
                             fontFamily: "inherit"
                         }}
                         onClick={(event) => {

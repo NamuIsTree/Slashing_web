@@ -12,7 +12,7 @@ const MenuItem = ({children, to}) => (
 const Header = (props, context) => {
     return (
         <div className="header-container">
-            <a href="/" text-decoration="none">
+            <a href="/" textDecoration="none">
                 <header className="web-header">
                     <span className="logo-slogan">Sing Along With The World!</span>
                     <br/>
