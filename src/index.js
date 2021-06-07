@@ -17,7 +17,7 @@ ReactDOM.render(
             <IndexRoute component={Home}/>
             <Route path="/search" component={Search}/>
             <Route path="/view" component={View}/>
-            <Route path="/private" component={Private}/>
+            <Route path="/analysis" component={Private}/>
             <Route path="/edit" component={Edit}/>
         </Route>
     </Router>,

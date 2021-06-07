@@ -12,21 +12,24 @@ const MenuItem = ({children, to}) => (
 const Header = (props, context) => {
     return (
         <div className="header-container">
-            <a href="/">
+            <a href="/" text-decoration="none">
                 <header className="web-header">
-                    <h1>S/ing Demo</h1>
+                    <span className="logo-slogan">Sing Along With The World!</span>
+                    <br/>
+                    <span className="logo">S<span className="logo-slash">/</span>ING</span>
+                    <br/>
+                    <span className="sub-logo">S L A S H I N G</span>
                 </header>
             </a>
             <nav className="web-menu">
                 <MenuItem to={'/'}>
-                    Home
+                    Search
                 </MenuItem>
-                {' | '}
-                <MenuItem to={'/private'}>
-                    Private
+                <MenuItem to={'/analysis'}>
+                    Analysis
                 </MenuItem>
-                <br/> <br/>
             </nav>
+            <br/>
         </div>
     )
 }

@@ -20,6 +20,54 @@
     font-family: 'LotteMartDream', sans-serif;
 }
 
+@import url('https://fonts.googleapis.com/css2?family=Comic+Neue:ital,wght@1,700&display=swap');
+
+.header-container a {
+    text-decoration: none;
+}
+
+.web-header {
+    background-color: #6886C5;
+    font-family: 'LotteMartDream', sans-serif;
+    padding: 10px;
+}
+
+.logo-slogan {
+    color: #CCD2F0;
+    font-size: 1.5rem;
+}
+
+.logo {
+    color: white;
+    font-weight: 900;
+    font-size: 5rem;
+}
+
+.logo-slash {
+    color: #FC5230;
+}
+
+.sub-logo {
+    color: #CCD2F0;
+    font-size: 1.8rem;
+}
+
+.web-menu {
+    background-color: #99a1c9;
+}
+
+.menu-item {
+    display: inline-block;
+    width: 33%;
+    padding: 10px;
+    font-size: 1.3rem;
+    color: white;
+}
+
+.menu-item:hover {
+    background-color: #696f8f;
+}
+
 .header-container {
     text-align: center;
     font-family: 'LotteMartDream', sans-serif;

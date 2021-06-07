@@ -34,11 +34,15 @@ class Home extends React.Component {
         return (
             <div className="home-container">
                 <TextField
-                    className = "search-bar"
                     onChange={(event) => {
                         try {
                             this.setState({search_key: event.target.value});
                         } catch(e) {}
+                    }}
+                    placeholder="Youtube Video Title"
+                    style = {{
+                        width: '50%',
+                        maxWidth: '500px'
                     }}
                     InputProps = {{
                         startAdornment: (
